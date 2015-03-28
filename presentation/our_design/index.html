@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>如果这次要修改ui的话，就要做（改）一套我们自己的ui库</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+  
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script
+   >   var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="../lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">      
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h2>维护我们自己的Web UI库</h2>
+          <h4>关于这次网站UI修改的建议</h4>
+          <p>
+            <small><a href="https://oyyd.net">@oyyd</a></small>
+          </p>
+        </section>
+        <section>
+          <h3>首先是我的疑问</h3>
+          <ul>
+            <li>这次修改UI的目的是什么？（是为了有别于以前？或是为了重构网站？）</li>
+            <li>这次修改UI是只涉及UI还是要把业务逻辑也重新写一遍？（我们是要在这次重写我们的系统吗？）</li>
+          </ul>
+        </section>
+        <section>
+          <h3>但不管意向如何，至少这次我们需要维护一套我们自己的Web UI库，原因如下：</h3>
+          <ul>
+            <li>维护使用同一套UI库可以保证以后我们所有Web应用的风格一致。</li>
+            <li>使UI能适应响应式设计，有利于未来网站进一步改进。</li>
+            <li>减少重复的工作。</li>
+            <li>有利于多人协作开发。</li>
+            <li>提高软件质量。</li>
+          </ul>
+        </section>
+        <section>
+          <h3>这部分工作所要付出的代价：</h3>
+          <ul>
+            <li>一部分额外额工作时间</li>
+          </ul>
+        </section>
+        <section>
+          <p>但我判断耗费的这部分额外的工作时间<strong>肯定是值得的</strong>，并且我有考虑效率的问题，目前打算在bootstrap3的基础上进行，而非从零开始。</p>          
+        </section>
+        <section>
+          <h3>那么先看几个Web UI的例子：</h3>
+          <ul>
+            <li><a href="http://getbootstrap.com/">bootstrap3（计划作为基础的库）</a></li>
+            <li><a href="http://designmodo.github.io/Flat-UI/">Flat UI（基于bootstrap3的UI库）</a></li>
+            <li><a href="http://material-ui.com/">React Material（遵循google的material design风格的UI，个人觉得非常有吸引力）</a></li>
+          </ul>
+        </section>
+        <section>
+          <h3>TL;DR Flat UI</h3>
+          <img src="img/flat_ui.png"/>
+        </section>
+        <section>
+          <h3>TL;DR Material UI</h3>
+          <img src="img/material_react.png"/>
+        </section>        
+        <section>
+          <h3>理想当然很美好：</h3>
+          <p>需要继续麻烦程新，和我一起合作，并在以后不断交流改进。</p>
+        </section> 
+        <section>
+          <h3>同时这也需要程新多去了解一下web设计的前沿的东西</h3>
+          <h5>（特别是我不清楚程新你这方面的情况，这里惶恐地列出一些我擅自认为你需要了解的东西）</h5>
+          <ul>
+            <li>一般UI中常见的部件（参考前面的例子，可以多和我探讨）</li>
+            <li>响应式设计</li>
+            <li>Mobile First（特别是为什么）</li>
+            <li>保持设计风格和UI的风格尽可能的一致（当然UI的设计也可以不断改进）</li>
+          </ul>
+          <p>应该说不仅需要了解，还要应用到实践中。</p>
+        </section>
+        <section>
+          <h3>我希望大家都能认同我的决定</h3>
+          <p>并且更加重视软件开发的一般流程，认同其所需要的工时上的消耗，以及所需要的人手，哪怕我们现在的规模不大，而不要在我们真的接到了大单子以后再对我们自己的产品犹豫，发慌。并且我由衷地希望这仅仅是个开始。</p>
+        </section>
+        <section>
+          <h2>谢谢！</h2>
+          <h4>同时我的邮箱已经启用，大家以后可以给我发邮件</h4>       
+          <p>yadong.ouyang@coilabs.com</p>
+        </section>
+      </div>
+    </div>
+
+    <script src="../lib/js/head.min.js"></script>
+    <script src="../js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '../plugin/zoom-js/zoom.js', async: true },
+          { src: '../plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
