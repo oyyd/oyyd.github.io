@@ -49,6 +49,8 @@ Commonjs做法近似一般后端脚本语言。
 
 ```js
 var User = require('path/to/User.js');// node module
+var House = {};
+module.exports = House;
 ```
 
 可用库：Node的模块, Seajs（淘宝）,
@@ -111,7 +113,7 @@ ___更加直观的层级，css代码更容易维护:__
 
 还是要？：
 
-```less
+```css
  @size = 100px;
  @mainColor = red;
  @bigFont = 30px;
@@ -151,6 +153,28 @@ __import:__
 
 ##前端开发模式的讨论
 
+我们想要：
+
+1. 代码中提供相似功能的component只有一个
+
+2. 别人可以方便地使用component，而不需要去了解其细节
+
+3. 同样的数据，在所有components中只有一份
+
+4. 更新数据即可该改变component的表现
+
+###我在开发中遇到的一些问题
+
+* 一个部件是否要独立写出来？(price-dragger.vm, HouseInfoCircle.js)
+
+UI上的东西都很可能被重复使用，也应该被重复使用。并且以一个component的角度出发来写一个东西并不会比写一个一次性的东西要花费更多的时间。
+
+* 一个部件虽然独立了出来，使用也没问题，但却没办法在一个页面中使用多次
+
+$()是全局搜索，会对其他相同的部件产生影响
+
+* 封装成独立的jquery对象或jquery plugin的方式虽好，但他们需要在js中手动生成大量DOM
+
 这里只探讨（个人觉得）最有价值的几种：
 
 * jquery only（或是其他jquery类型的库）
@@ -159,16 +183,49 @@ __import:__
 
 * React
 
-Angular：google angular团队开发，主要负责人misko本身长期负责java上的开发和质量保证，Angular吸取了很多java（spring）的经验。
+###Angular
 
-React：facebook开发。Instagram网站，阿里（支付宝部分，天猫部分）
+google angular团队开发，主要负责人misko本身长期负责java上的开发和质量保证，Angular吸取了很多java（spring）的经验。
+
+###React
+
+facebook开发。
+
+Instagram网站，阿里（支付宝，淘宝，天猫部分）, AirBnb等。链接：[Who use react?](https://github.com/facebook/react/wiki/Sites-Using-React)
+
+特性：
+
+0. React可能是对UI抽象最优秀的框架，这使得用React构建的部件非常易于分割和组合，数据变化非常容易被追踪和控制。
+
+1. Virtual DOM提高性能，性能仅次于native。benchmark结果：
+
+native js > react > jquery > angular
+
+2. 很容易学习
+
+3. 只是MVC中的V，不提供冗余的特性。
+
+链接：[Removing User Interface Complexity, or Why React is Awesome](http://jlongster.com/Removing-User-Interface-Complexity,-or-Why-React-is-Awesome)
+
+###探讨
 
 先表明立场：jquery很好很强大，它简单易用，非常灵活，可以应对大量应用场景。同时其生态系统又丰富而完善，
 大大小小的前端库都会基于jquery。
 
-但灵活的代码问题就是难以维护。接下来我会参杂其他一些大牛的文章来探讨一下这个问题。
+但：
+
+* 原生javascript和jquery都不是声明式，他们需要大量进行DOM query
 
 测试代码
 
 在公司学习java时，我觉得（我们公司的）java代码很优秀，很适合生产环境，很好维护很好扩展。我觉得自己会产生这种想法的原因是，在扩展公司的代码时，很容易想到。结合Yahoo前端大牛Douglas Crokford说过的一句话：
 
+##总结
+
+0. 用Less取代css，用Less来提供本来是由velocity提供的css功能补足，将对样式（样式代码）的关注从vm中分离。
+
+1. 划分js模块，缩小单个js文件代码的粒度，提高可复用性。
+
+2. 将代码的重点放入到分离的静态js中（从而更好地划分模块和打包），尽可能只让vm进行高层次上的代码组合和数据，UI初始化，细节应该由js自行处理。
+
+3. 由React构建UI，并保证两点：1. UI尽可能的无状态性（stateless，即在React中尽可能由props代替state）2. 将state尽可能地集成到顶层

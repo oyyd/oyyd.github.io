@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>前端开发趋势</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+  
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script
+   >   var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="../lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">      
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>前端开发趋势</h1>
+          <h4>ttt会议话题</h4>
+          <p>
+            <small><a href="https://oyyd.net">@oyyd</a></small>
+          </p>
+        </section>
+        <section>
+          <h3>内容概述</h3>
+          <ul>
+            <li>js模块</li>
+            <li>css预处理语言Less</li>
+            <li>前端开发框架</li>
+            <li>其他前沿话题</li>
+          </ul>
+        </section>
+        <section>
+          <h3>前言：区别下面这些东西</h3>
+          <ul>
+            <li>javascript——ECMAScript</li>
+            <li>DOM——W3C</li>
+            <li>BOM</li>
+          </ul>
+        </section>
+        <section>
+          <h2>js模块</h2>
+        </section>
+        <section>
+          <h2>Script标签（global）</h2>
+          <pre>
+            <code>
+              <script src="../lib/js/head.min.js"></script>
+              <script src="../js/reveal.js"></script>
+            </code>
+          </pre>
+          浏览器加载脚本需要向服务器进行请求，环境特殊。
+        </section>
+        <section>
+          <h4>Why not global module system?</h4>
+          <ul>
+            <li>工程师需要记忆依赖顺序并依次引入标签</li>
+            <li>不注意分割js文件的话，文件代码容易变得很长，也不利于复用</li>
+            <li>文件分割过细会导致文件请求数量变大，依赖管理更加困难</li>
+          </ul>
+        </section>
+        <section>
+          <img src="img/dependencies.jpg"/>
+        </section>
+        <section>
+          <h4>模块CommonJs与AMD（requirejs）</h4>
+          <pre>
+            <code>
+              // commonjs
+              var User = require('./User.js');
+              var http = require('http');
+              ...
+              module.exports = House;
+            </code>
+          </pre>
+          <pre>
+            <code>
+              // AMD
+              define(['User', 'http'], function(User, http){
+                ...
+                return House;
+              });
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4>模块CommonJs与AMD（requirejs）</h4>
+          <p>Commonjs更加简洁，但在浏览器上会依次加载大量小脚本</p>
+          <p>AMD会根据依赖自动异步加载脚本，即互相不依赖的脚本会被同时加载，以加快脚本加载速度。</p>
+          <p>CommonJs lib: Seajs(阿里), Node</p>
+          <p>AMD lib: Requirejs</p>
+        </section>
+        <section>
+          <h4>打包: CommonJs + browserify/webpack</h4>
+          <img src="https://d262ilb51hltx0.cloudfront.net/max/1408/1*tNh8NTBrl74k06Id07Wggw.png"/>
+          <p>（PS1：AMD的特点是异步加载，但打包的话就没有这一特点了，所以这里不提AMD + 打包）</p>
+          可以大量减少js文件的请求数量
+        </section>
+        <section>
+          <h2>css预处理语言Less（Ruby： Sass, Scss，Node：Less）</h2>
+          <h4>看下面的例子</h4>
+        </section>
+        <section>
+          <h2>css</h2>
+          <pre>
+            <code>
+              .component{
+                height: 100px;
+                width: 160px; /*100x160*/
+              }
+              .component .header{
+                color: red;
+              }
+              .component .header .title{
+                font-size: 30px;
+              }
+              .component .header .footer{
+                ...
+              }
+            </code>
+          </pre>
+          <p>如果：component名称需要变更，值需要统一的话，</p>
+        </section>
+        <section>
+          <h2>Less</h2>
+          <pre>
+            <code>
+              @size = 100px;
+              @mainColor = red;
+              @bigFont = 30px;
+              .component{
+                width: @size;
+                height: @size;
+                .header{
+                  color: @mainColor;
+                  h1.title{
+                    font-size:@bigFont;
+                  }
+                }
+                .footer{
+                  //...
+                }
+              }
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h2>css预处理语言Less</h2>
+          <ol>
+            <li>Less百分百兼容css，平稳过渡，或仍旧使用css。</li>
+            <li>Seperation of Concern</li>
+            <li>Less非常简单，几乎不需要额外学习。</li>
+          </ol>
+        </section>
+        <section>
+          <h2>前端开发框架</h2>
+          <h4>从问题开始</h4>
+        </section>
+        <section>
+          <h4>Native和jQuery</h4>
+          <pre>
+            <code>
+              Node.getElementById() 
+              Node.querySelector() // html5
+              $() // jquery
+            </code>
+          </pre>
+          <p>我们应想办法有效地解决混乱</p>
+        </section>
+        <section>
+          <h4>MV(C) Backbonejs</h4>
+          <p>我们在写（修改）代码时，至少应该要知道去哪里找数据，去哪里修改试图</p>
+          <pre>
+            <code>
+              {value1:...}   <->   <input />
+            </code>
+          </pre>
+        </section>
+        <section>
+          <p>Localytics: 开始时，代码很乱，错综复杂，而在使用Backbone后，这一问题得到了解决，并一直稳定运行...要在更深层次嵌入视图，恶梦却开始了，最终我们感到了绝望。 </p>
+          <p>Localytics: Backbone做了一个简单但我们却无法实现的承诺：你必须编写胶合代码（glue code）到DOM里面查找一个拥有特定id的元素，然后手动更新HTML——当模型发生变化时，视图也会随之更新。</p>
+        </section>
+        <section>
+          <p>一般前端代码做的最多的一件事情：$()（DOM manipulation）</p>
+          <p>我们应该有某些方法来帮助我们做这件事情</p>
+        </section>
+        <section>
+          <h4>1. 用声明式(Declarative)代码简化代码复用与初始化</h4>
+          <pre>
+            <code>
+              <App>
+                <Header></Header>
+                <Content></Content>
+                <Footer></Footer>
+              </App>
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4>2. 帮助我们将数据渲染进视图</h4>
+          <p>后面提到</p>
+        </section>
+        <section>
+          Localytics：我们用Angular以后
+          <img src="http://cms.csdnimg.cn/article/201304/12/516780bf28d77.jpg"/><br/>
+          代码越少，问题越少。
+        </section>
+        <section>
+          <h2>Angular</h2>
+          <img src="https://angular.io/resources/images/logos/standard/shield-large.png"/>
+          <p>google开发，汲取大量java（spring）等语言的经验来填补这一问题</p>
+        </section>
+        <section>
+          <p>在jquery(native)中的数据绑定</p>
+          <pre>
+            <code>
+              <input id="name" type="text" />
+              <script>
+                var name = "oyyd";
+                // 初始化
+                var input = $("#name").val(name);
+                // 数据改变时重新渲染的方法
+                function render(){
+                  input.val(name);
+                }
+                // UI值改变时改变name的方法，或者获取UI上的值的方法
+                function getName(){
+                  return input.val();
+                };
+              </script>
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4>Angular双向数据绑定(MVVM)</h4>
+          <pre>
+            <code>
+              <input type="text" ng-model="name"/>
+            </code>
+            <code>
+              $scope.name = "oyyd";
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4>Angular特性丰富</h4>
+          <ul>
+            <li>AOP（Service）</li>
+            <li>MV*（controller，directives，template）</li>
+            <li>大型web开发（angular module，DI）</li>
+            <li>测试（Karma）</li>
+          </ul>
+        </section>
+        <section></section>
+        <section>
+          <h4>虽然Angular特性丰富而强大：</h4>
+          <ul>
+            <li>双向数据绑定缺点：$scope.apply，难以追踪数据流</li>
+            <li>Angular学习曲线陡峭</li>
+            <li>Over Features</li>
+            <li>我：熟悉的话，开发效率很高。然而若想要保证代码的复用性和易于扩展，仍对工程师有很高的要求。</li>
+          </ul>
+          <p>Angular开发与09年，github stars数量最多的framework</p>
+        </section>
+        <section>
+          <h4>Angular和其他很多框架/架构虽然遵循后端经验分离了MV，然而却没有面对前端的情况从顶层提出一个更好的抽象方法。</h4>
+          <a href="https://news.ycombinator.com/item?id=8830640">Why you should not use AngularJs?</a>
+        </section>
+        <section>
+          <h4>React</h4>
+          <p>Pete Hunt：React isn't an MVC framework.</p>
+          <img src="https://facebook.github.io/react/img/logo.svg"/>
+        </section>
+        <section>
+          <h2>Why these?</h2>
+          <p>Addy Osamani: Are you happy crafting (from scratch) the architecture and pieces that solve these problems on your own?</p>
+        </section>
+        <section>
+          <h1>其他前沿话题</h1>
+        </section>
+        <section>
+          <h4>ECMAScript2015（ES6）</h4>
+          <p>从ECMAScript6到ECMAScript2015</p>
+        </section>
+        <section>
+          <h4>Class</h4>
+          <pre>
+            <code>
+              class SkinnedMesh extends THREE.Mesh {
+                constructor(geometry, materials) {
+                  super(geometry, materials);
+
+                  this.idMatrix = SkinnedMesh.defaultMatrix();
+                  this.bones = [];
+                  this.boneMatrices = [];
+                  //...
+                }
+                update(camera) {
+                  //...
+                  super.update();
+                }
+                static defaultMatrix() {
+                  return new THREE.Matrix4();
+                }
+              }
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4>Generator</h4>
+          <pre>
+            <code>
+              function* fibonacciGen() {
+                var pre = 0, cur = 1;
+                for (;;) {
+                  var temp = pre;
+                  pre = cur;
+                  cur += temp;
+                  yield cur;
+                }
+              }
+
+              var fibonacci = fibonacciGen();
+              for(var i=0;i<10;i++){
+                console.log(fibonacci.next().value);
+              }
+            </code>
+          </pre>
+          <p><a href="http://koajs.com/">koajs, co</a></p>
+        </section>
+        <section>
+          <h4>Modules and Module Loaders</h4>
+          <pre>
+            <code>
+              import * as math from "lib/math";
+              var e = 2.71828182846;
+              export default function(x) {
+                  return Math.exp(x);
+              }
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h2>谢谢！其他参考：</h2>
+          <ul>
+            <li><a href="https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b">JavaScript Application Architecture On The Road To 2015</a></li>
+            <li><a href="http://jlongster.com/Removing-User-Interface-Complexity,-or-Why-React-is-Awesome">Removing User Interface Complexity, or Why React is Awesome</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="../lib/js/head.min.js"></script>
+    <script src="../js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '../plugin/zoom-js/zoom.js', async: true },
+          { src: '../plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
