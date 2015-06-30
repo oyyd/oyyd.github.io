@@ -56,14 +56,6 @@
           </ul>
         </section>
         <section>
-          <h3>前言：区别下面这些东西</h3>
-          <ul>
-            <li>javascript——ECMAScript</li>
-            <li>DOM——W3C</li>
-            <li>BOM</li>
-          </ul>
-        </section>
-        <section>
           <h2>js模块</h2>
         </section>
         <section>
@@ -190,45 +182,65 @@
               $() // jquery
             </code>
           </pre>
-          <p>我们应想办法有效地解决混乱</p>
+        </section>
+        <section>
+          <p>虽然在构建应用时没有问题，然而在阅读或扩展代码时：</p>
+          <ol>
+            <li>寻找DOM</li>
+            <li data="class, id, role">用于DOM操作的钩子</li>
+            <li>搜索使用了这个钩子的地方（$()）</li>
+            <li>查看它们使用的方法</li>
+            <li>进入下一个地方，随机从1, 2, 4开始</li>
+          </ol>
+        </section>
+        <section>
+          <h4 data="或者说，不仔细考虑怎么做的话，就根本没有抽象">因为抽象混乱</h4>
+          <p>虽然从细节看，很容易明确每一个操作的作用；但自顶至底来看，却很难明确每一个操作的目的。</p>
+          <p>过程式的，缺乏有效的抽象 + 动态类型，闭包（作用域链），全局作用域等 = 难理解，难预测追踪，难扩展</p>
         </section>
         <section>
           <h4>MV(C) Backbonejs</h4>
-          <p>我们在写（修改）代码时，至少应该要知道去哪里找数据，去哪里修改试图</p>
+          <img src="http://www.css88.com/doc/backbone/docs/images/backbone.png" style="background-color:white;"/>
+          <p>他山之石可以攻玉</p>
+          <p>前端MVC + 自定义事件监听</p>
+          <p data="在V<->M之间没有任何作为"></p>
+        </section>
+        <section>
           <pre>
             <code>
-              {value1:...}   <->   <input />
+              var Sidebar = Backbone.Model.extend({
+                promptColor: function() {
+                  var cssColor = prompt("Please enter a CSS color:");
+                  this.set({color: cssColor});
+                }
+              });
+              var DocumentRow = Backbone.View.extend({
+                model: Sidebar,
+                events: {
+                  "click .icon":          "open"
+                },
+                initialize: function() {
+                  this.listenTo(this.model, "change", this.render);
+                },
+                render: function() {
+                  ...
+                }
+              });
             </code>
           </pre>
         </section>
         <section>
-          <p>Localytics: 开始时，代码很乱，错综复杂，而在使用Backbone后，这一问题得到了解决，并一直稳定运行...要在更深层次嵌入视图，恶梦却开始了，最终我们感到了绝望。 </p>
-          <p>Localytics: Backbone做了一个简单但我们却无法实现的承诺：你必须编写胶合代码（glue code）到DOM里面查找一个拥有特定id的元素，然后手动更新HTML——当模型发生变化时，视图也会随之更新。</p>
+          <p data="早期框架之一，尝试解决代前端码设计上的问题，帮助我们做的事情很少">Localytics: "开始时（jquery only），代码很乱，错综复杂，而在使用Backbone后，这一问题得到了解决，并一直稳定运行"</p>
+          <p>Localytics: "要在更深层次嵌入视图，恶梦却开始了，最终我们感到了绝望。</p>
+          <p>Backbone需要我们做一个简单但却无法实现的承诺：你必须编写胶合代码（glue code）到DOM里面查找一个拥有特定id的元素，然后手动更新HTML——当模型发生变化时，视图也会随之更新。"</p>
         </section>
         <section>
-          <p>一般前端代码做的最多的一件事情：$()（DOM manipulation）</p>
-          <p>我们应该有某些方法来帮助我们做这件事情</p>
-        </section>
-        <section>
-          <h4>1. 用声明式(Declarative)代码简化代码复用与初始化</h4>
-          <pre>
-            <code>
-              <App>
-                <Header></Header>
-                <Content></Content>
-                <Footer></Footer>
-              </App>
-            </code>
-          </pre>
-        </section>
-        <section>
-          <h4>2. 帮助我们将数据渲染进视图</h4>
-          <p>后面提到</p>
+          <p data="DOM manipulation">大量使用$()来保持数据可UI之间的同步</p>
+          <p>我们应该有某些方法来帮助我们帮助我们将数据渲染进视图</p>
         </section>
         <section>
           Localytics：我们用Angular以后
-          <img src="http://cms.csdnimg.cn/article/201304/12/516780bf28d77.jpg"/><br/>
-          代码越少，问题越少。
+          <img data="代码越少，问题越少。" src="http://cms.csdnimg.cn/article/201304/12/516780bf28d77.jpg"/>
         </section>
         <section>
           <h2>Angular</h2>
@@ -276,25 +288,93 @@
             <li>测试（Karma）</li>
           </ul>
         </section>
-        <section></section>
         <section>
-          <h4>虽然Angular特性丰富而强大：</h4>
+          <h4>Angular中的MV</h4>
+          <pre>
+            <code>
+              <p ng-controller="myController" show-name></p>
+              <script>
+              var myController = angular.controller('myController', function($scope){
+                $scope.name = "oyyd";
+              });
+              var showName = angular.directive('showName', function(){
+                return {
+                  link: function(s, e, a){
+                    s.$watch('name', function(newValue){
+                      if(newValue){
+                        e.style.display = "none";
+                      }else{
+                        e.style.display = "inline";
+                      }
+                    });
+                  },
+                  template: "<span>{{name}}</span>"
+                };
+              });
+              </script>
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4></h4>
           <ul>
-            <li>双向数据绑定缺点：$scope.apply，难以追踪数据流</li>
-            <li>Angular学习曲线陡峭</li>
+            <li data="用户改变数据，数据改变会改变数据">双向数据绑定缺点：$scope.apply，难以追踪数据流</li>
+            <li data="angular2说不向前兼容时">Angular学习曲线陡峭</li>
             <li>Over Features</li>
-            <li>我：熟悉的话，开发效率很高。然而若想要保证代码的复用性和易于扩展，仍对工程师有很高的要求。</li>
+            <li data="我：熟悉的话，开发效率很高。然而若想要保证代码的复用性和易于扩展，仍对工程师有很高的要求。"></li>
           </ul>
-          <p>Angular开发与09年，github stars数量最多的framework</p>
+          <p>Angular 09年启动，github stars数量最多的framework</p>
         </section>
         <section>
           <h4>Angular和其他很多框架/架构虽然遵循后端经验分离了MV，然而却没有面对前端的情况从顶层提出一个更好的抽象方法。</h4>
+          <p data="controller和directive是为了复用，如果是为了复用，我们就需要仔细考虑如何分割他们。虽然Angular是声明式的，但我们在构建完以后仍然需要跳回到app中去调整，控制它们"></p>
           <a href="https://news.ycombinator.com/item?id=8830640">Why you should not use AngularJs?</a>
         </section>
         <section>
           <h4>React</h4>
-          <p>Pete Hunt：React isn't an MVC framework.</p>
-          <img src="https://facebook.github.io/react/img/logo.svg"/>
+          <p data="在UI中，数据和视图之间的贴合事实上要比我们想象的紧密的多。">Pete Hunt：React isn't an MVC framework.</p>
+          <img style="width:300px;" src="https://facebook.github.io/react/img/logo.svg"/>
+        </section>
+        <section>
+          <h4>React Features</h4>
+          <ol>
+            <li>单向数据绑定</li>
+            <li data="real">声明式</li>
+            <li>Virtual DOM</li>
+          </ol>
+        </section>
+        <section>
+          <h4 data="不像Angular，既然粘和，那就粘和">React简单，也没有进行复杂的抽象。</h4>
+          <pre data="js to control html, state top level">
+            <code>
+              var Name = React.createClass({
+                render(){
+                  <p>{this.props.userName}</p>
+                };
+              });
+              var App = React.createClass({
+                getInitialState(){
+                  return{
+                    userName: 'oyyd'
+                  };
+                },
+                render(){
+                  return(
+                    <div>
+                      <Name userName={this.state.userName}/>
+                    </div>
+                  );
+                }
+              });
+            </code>
+          </pre>
+        </section>
+        <section>
+          <p data="instagram">然而就是就是这么一套简单的，却成功地构建了很多应用：</p>
+          <a href="https://github.com/facebook/react/wiki/Sites-Using-React">Sites Using React</a>
+        </section>
+        <section>
+          <h4>事件机制与CSP</h4>
         </section>
         <section>
           <h2>Why these?</h2>
@@ -306,6 +386,7 @@
         <section>
           <h4>ECMAScript2015（ES6）</h4>
           <p>从ECMAScript6到ECMAScript2015</p>
+          <a href="babeljs.io">babel</a>
         </section>
         <section>
           <h4>Class</h4>
@@ -366,6 +447,20 @@
           </pre>
         </section>
         <section>
+          <h4>编译成javascript的语言</h4>
+          <ul data="以提供额外的特性">
+            <li>TypeScript</li>
+            <li>Dartjs</li>
+            <li>Clojurejs</li>
+          </ul>
+        </section>
+        <section>
+          <h4>Servo浏览器原型</h4>
+        </section>
+        <section>
+          <h4></h4>
+        </section>
+        <section>
           <h2>谢谢！其他参考：</h2>
           <ul>
             <li><a href="https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b">JavaScript Application Architecture On The Road To 2015</a></li>
@@ -374,10 +469,8 @@
         </section>
       </div>
     </div>
-
     <script src="../lib/js/head.min.js"></script>
     <script src="../js/reveal.js"></script>
-
     <script>
 
       // Full list of configuration options available at:
